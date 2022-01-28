@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <!--
   /**
@@ -21,17 +21,15 @@
   -->
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.zookeeper</groupId>
+    <groupId>io.streamnative</groupId>
     <artifactId>parent</artifactId>
-    <version>3.6.4-SNAPSHOT</version>
+    <version>3.6.3.1-rc-1</version>
     <relativePath>..</relativePath>
   </parent>
-
   <artifactId>zookeeper-jute</artifactId>
   <packaging>jar</packaging>
   <name>Apache ZooKeeper - Jute</name>
   <description>ZooKeeper jute</description>
-
   <dependencies>
     <dependency>
       <groupId>org.apache.yetus</groupId>
@@ -43,7 +41,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -96,7 +93,7 @@
               <executable>java</executable>
               <arguments>
                 <argument>-classpath</argument>
-                <classpath />
+                <classpath/>
                 <argument>org.apache.jute.compiler.generated.Rcc</argument>
                 <argument>-l</argument>
                 <argument>java</argument>
@@ -115,7 +112,7 @@
               <executable>java</executable>
               <arguments>
                 <argument>-classpath</argument>
-                <classpath />
+                <classpath/>
                 <argument>org.apache.jute.compiler.generated.Rcc</argument>
                 <argument>-l</argument>
                 <argument>c</argument>
@@ -148,7 +145,7 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
-            <skip>true</skip>
+          <skip>true</skip>
         </configuration>
       </plugin>
       <plugin>
@@ -185,5 +182,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

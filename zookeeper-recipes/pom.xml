@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <!--
   /**
@@ -20,13 +20,11 @@
    */
   -->
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
-    <groupId>org.apache.zookeeper</groupId>
+    <groupId>io.streamnative</groupId>
     <artifactId>parent</artifactId>
-    <version>3.6.4-SNAPSHOT</version>
+    <version>3.6.3.1-rc-1</version>
   </parent>
-
   <artifactId>zookeeper-recipes</artifactId>
   <packaging>pom</packaging>
   <name>Apache ZooKeeper - Recipes</name>
@@ -54,21 +52,19 @@
     in zookeeper-recipes/$recipename/src/c
 
   </description>
-
   <modules>
     <module>zookeeper-recipes-election</module>
     <module>zookeeper-recipes-lock</module>
     <module>zookeeper-recipes-queue</module>
   </modules>
-
   <dependencies>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
@@ -96,17 +92,15 @@
       <optional>true</optional>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
-       <artifactId>maven-deploy-plugin</artifactId>
-       <configuration>
-         <!-- this module isn't to be deployed to Maven Central -->
-         <skip>true</skip>
-       </configuration>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <!-- this module isn't to be deployed to Maven Central -->
+          <skip>true</skip>
+        </configuration>
       </plugin>
     </plugins>
   </build>
-
 </project>

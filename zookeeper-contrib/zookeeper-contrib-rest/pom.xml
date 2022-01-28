@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <!--
   /**
@@ -21,11 +21,10 @@
   -->
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.zookeeper</groupId>
+    <groupId>io.streamnative</groupId>
     <artifactId>zookeeper-contrib</artifactId>
-    <version>3.6.4-SNAPSHOT</version>
+    <version>3.6.3.1-rc-1</version>
   </parent>
-
   <artifactId>zookeeper-contrib-rest</artifactId>
   <packaging>jar</packaging>
   <name>Apache ZooKeeper - Contrib - Rest</name>
@@ -44,21 +43,19 @@
 
     See SPEC.txt for details on the REST binding.
   </description>
-
   <properties>
     <asm.version>3.1</asm.version>
     <grizzly.version>1.9.8</grizzly.version>
     <jersey.version>1.1.5.1</jersey.version>
   </properties>
-
   <dependencies>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
@@ -120,7 +117,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -133,5 +129,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

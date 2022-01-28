@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <!--
   /**
@@ -21,17 +21,15 @@
   -->
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.zookeeper</groupId>
+    <groupId>io.streamnative</groupId>
     <artifactId>zookeeper-client</artifactId>
-    <version>3.6.4-SNAPSHOT</version>
+    <version>3.6.3.1-rc-1</version>
     <relativePath>..</relativePath>
   </parent>
-
   <artifactId>zookeeper-client-c</artifactId>
   <packaging>jar</packaging>
   <name>Apache ZooKeeper - Client - C</name>
   <description>ZooKeeper c client</description>
-
   <profiles>
     <profile>
       <id>c-test-coverage</id>
@@ -49,10 +47,9 @@
       </properties>
     </profile>
   </profiles>
-
   <build>
     <plugins>
-        <plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <executions>
@@ -104,7 +101,7 @@
             <phase>generate-sources</phase>
             <configuration>
               <tasks>
-                <mkdir dir="target/c" />
+                <mkdir dir="target/c"/>
               </tasks>
             </configuration>
             <goals>
@@ -117,12 +114,12 @@
             <configuration>
               <tasks>
                 <exec dir="${basedir}/target/c" executable="make" failonerror="true">
-                  <env key="LD_LIBRARY_PATH" value="${env.LD_LIBRARY_PATH};/usr/lib" />
-                  <env key="PATH" path="${env.PATH};${basedir};" />
-                  <env key="CALLER" value="ANT" />
-                  <env key="CLOVER_HOME" value="${basedir}/../../zookeeper-server/target" />
-                  <env key="base_dir" value="${basedir}/../.." />
-                  <arg line="clean install" />
+                  <env key="LD_LIBRARY_PATH" value="${env.LD_LIBRARY_PATH};/usr/lib"/>
+                  <env key="PATH" path="${env.PATH};${basedir};"/>
+                  <env key="CALLER" value="ANT"/>
+                  <env key="CLOVER_HOME" value="${basedir}/../../zookeeper-server/target"/>
+                  <env key="base_dir" value="${basedir}/../.."/>
+                  <arg line="clean install"/>
                 </exec>
               </tasks>
             </configuration>
@@ -138,12 +135,12 @@
               <skip>${skipTests}</skip>
               <tasks>
                 <exec dir="${basedir}/target/c" executable="make" failonerror="true">
-                  <env key="LD_LIBRARY_PATH" value="${env.LD_LIBRARY_PATH};/usr/lib" />
-                  <env key="PATH" path="${env.PATH};${basedir};" />
-                  <env key="CALLER" value="ANT" />
-                  <env key="CLOVER_HOME" value="${basedir}/../../zookeeper-server/target" />
-                  <env key="base_dir" value="${basedir}/../.." />
-                  <arg line="check" />
+                  <env key="LD_LIBRARY_PATH" value="${env.LD_LIBRARY_PATH};/usr/lib"/>
+                  <env key="PATH" path="${env.PATH};${basedir};"/>
+                  <env key="CALLER" value="ANT"/>
+                  <env key="CLOVER_HOME" value="${basedir}/../../zookeeper-server/target"/>
+                  <env key="base_dir" value="${basedir}/../.."/>
+                  <arg line="check"/>
                 </exec>
               </tasks>
             </configuration>
@@ -155,28 +152,51 @@
             <id>replace-cclient-files-during-release</id>
             <phase>none</phase>
             <goals>
-               <goal>run</goal>
+              <goal>run</goal>
             </goals>
             <configuration>
-               <target>
-                  <replaceregexp file="include/zookeeper_version.h" match="project.*" replace="project(zookeeper VERSION ${project.version})" byline="true" />
-                  <replace file="include/zookeeper_version.h" value="">
-                      <replaceToken>-SNAPSHOT</replaceToken>
-                  </replace>
-                  <replaceregexp file="CMakeLists.txt" match="project.*" replace="project(zookeeper VERSION ${project.version})" byline="true" />
-                  <replace file="CMakeLists.txt" value="">
-                      <replaceToken>-SNAPSHOT</replaceToken>
-                  </replace>
-                  <replaceregexp file="configure.ac" match="AC_INIT.*" replace="AC_INIT([zookeeper C client],${project.version},[user@zookeeper.apache.org],[zookeeper])" byline="true" />
-                  <replace file="configure.ac" value="">
-                      <replaceToken>-SNAPSHOT</replaceToken>
-                  </replace>
-               </target>
+              <target>
+                <replaceregexp file="include/zookeeper_version.h" match="project.*" replace="project(zookeeper VERSION ${project.version})" byline="true"/>
+                <replace file="include/zookeeper_version.h" value="">
+                  <replaceToken>-SNAPSHOT</replaceToken>
+                </replace>
+                <replaceregexp file="CMakeLists.txt" match="project.*" replace="project(zookeeper VERSION ${project.version})" byline="true"/>
+                <replace file="CMakeLists.txt" value="">
+                  <replaceToken>-SNAPSHOT</replaceToken>
+                </replace>
+                <replaceregexp file="configure.ac" match="AC_INIT.*" replace="AC_INIT([zookeeper C client],${project.version},[user@zookeeper.apache.org],[zookeeper])" byline="true"/>
+                <replace file="configure.ac" value="">
+                  <replaceToken>-SNAPSHOT</replaceToken>
+                </replace>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>javadoc-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>javadoc</classifier>
             </configuration>
           </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
-
 </project>

@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -16,67 +15,53 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-
 <!-- Imported by recipesb/*/build.xml files to share generic targets. -->
-
 <project name="zookeeperbuildrecipes">
-
   <property name="name" value="${ant.project.name}"/>
   <property name="root" value="${basedir}"/>
-
   <property name="zk.root" location="${root}/../../"/>
-
-  <property name="src.dir"  location="${root}/src/main/java"/>
+  <property name="src.dir" location="${root}/src/main/java"/>
   <property name="src.test" location="${root}/src/test"/>
-
   <property name="build.dir" location="${zk.root}/build/recipes/${name}"/>
   <property name="build.classes" location="${build.dir}/classes"/>
   <property name="build.test" location="${build.dir}/test"/>
-
   <property name="javac.deprecation" value="on"/>
   <property name="javac.debug" value="on"/>
-
   <property name="build.encoding" value="utf8"/>
-
   <!-- to be overridden by sub-projects -->
   <target name="check-recipes"/>
   <target name="init-recipes"/>
-
-  <property name="lib.jars.includes" value="lib/*.jar" />
-  <property name="lib.jars.excludes" value="" />
-
+  <property name="lib.jars.includes" value="lib/*.jar"/>
+  <property name="lib.jars.excludes" value=""/>
   <!-- prior to ant 1.7.1 fileset always fails if dir doesn't exist
        so just point to bin directory and provide settings that exclude
        everything - user can change as appropriate -->
-  <property name="additional.lib.dir" value="${zk.root}/bin" />
-  <property name="additional.lib.dir.includes" value="**/*.jar" />
-  <property name="additional.lib.dir.excludes" value="**/*.jar" />
-
+  <property name="additional.lib.dir" value="${zk.root}/bin"/>
+  <property name="additional.lib.dir.includes" value="**/*.jar"/>
+  <property name="additional.lib.dir.excludes" value="**/*.jar"/>
   <fileset id="lib.jars" dir="${root}">
-    <include name="${lib.jars.includes}" />
-    <exclude name="${lib.jars.excludes}" />
+    <include name="${lib.jars.includes}"/>
+    <exclude name="${lib.jars.excludes}"/>
   </fileset>
-
   <path id="classpath">
     <pathelement location="${build.classes}"/>
     <!-- allow the user to override (e.g. if there are local versions) -->
     <fileset dir="${additional.lib.dir}">
-      <include name="${additional.lib.dir.includes}" />
-      <exclude name="${additional.lib.dir.excludes}" />
+      <include name="${additional.lib.dir.includes}"/>
+      <exclude name="${additional.lib.dir.excludes}"/>
     </fileset>
     <fileset refid="lib.jars"/>
     <pathelement location="${zk.root}/build/classes"/>
     <fileset dir="${zk.root}/build/lib">
-      <include name="**/*.jar" />
+      <include name="**/*.jar"/>
     </fileset>
     <fileset dir="${zk.root}/build/test/lib">
       <include name="**/*.jar"/>
     </fileset>
     <fileset dir="${zk.root}/zookeeper-server/src/main/resources/lib">
-      <include name="**/*.jar" />
+      <include name="**/*.jar"/>
     </fileset>
   </path>
-
   <!-- ====================================================== -->
   <!-- Stuff needed by all targets                            -->
   <!-- ====================================================== -->
@@ -87,50 +72,34 @@
     <mkdir dir="${build.test}"/>
     <antcall target="init-recipes"/>
   </target>
-
   <!-- ====================================================== -->
   <!-- Compile a recipes files                                -->
   <!-- ====================================================== -->
   <target name="compile" depends="init" unless="skip.contrib">
     <echo message="contrib: ${name}"/>
-
-    <javac
-     encoding="${build.encoding}"
-     srcdir="${src.dir}"
-     includes="**/*.java"
-     destdir="${build.classes}"
-     debug="${javac.debug}"
-     deprecation="${javac.deprecation}">
+    <javac encoding="${build.encoding}" srcdir="${src.dir}" includes="**/*.java" destdir="${build.classes}" debug="${javac.debug}" deprecation="${javac.deprecation}">
       <classpath refid="classpath"/>
     </javac>
   </target>
-
   <!-- ====================================================== -->
   <!-- Make a recipes jar                                     -->
   <!-- ====================================================== -->
   <target name="jar" depends="compile" unless="skip.recipes">
     <echo message="recipes: ${name}"/>
-    <jar
-      jarfile="${build.dir}/zookeeper-${version}-recipes-${name}.jar"
-      basedir="${build.classes}"      
-    />
+    <jar jarfile="${build.dir}/zookeeper-${version}-recipes-${name}.jar" basedir="${build.classes}"/>
   </target>
-
   <!-- ====================================================== -->
   <!-- Package a recipes files                                -->
   <!-- ====================================================== -->
-  <target name="package" depends="jar" unless="skip.recipes"> 
+  <target name="package" depends="jar" unless="skip.recipes">
     <echo message="recipes: ${name}"/>
-
     <mkdir dir="${dist.dir}${package.share}/zookeeper-recipes/zookeeper-recipes-${name}"/>
-    <copy todir="${dist.dir}${package.share}/zookeeper-recipes/zookeeper-recipes-${name}" includeEmptyDirs="false"
-          flatten="true">
+    <copy todir="${dist.dir}${package.share}/zookeeper-recipes/zookeeper-recipes-${name}" includeEmptyDirs="false" flatten="true">
       <fileset dir="${build.dir}">
-        <include name="zookeeper-${version}-recipes-${name}.jar" />
+        <include name="zookeeper-${version}-recipes-${name}.jar"/>
       </fileset>
     </copy>
   </target>
-
   <!-- ================================================================== -->
   <!-- Clean.  Delete the build files, and their directories              -->
   <!-- ================================================================== -->
@@ -138,14 +107,11 @@
     <echo message="recipes: ${name}"/>
     <delete dir="${build.dir}"/>
   </target>
-
   <!-- ================================================================== -->
   <!-- Utility features                                                   -->
   <!-- ================================================================== -->
-
   <target name="checkMainIsAvailable">
-    <available classname="org.apache.zookeeper.ZooKeeperMain"
-               property="mainIsCompiled">
+    <available classname="org.apache.zookeeper.ZooKeeperMain" property="mainIsCompiled">
       <!-- we can't use id=classpath, because available fails if fileset directory
            doesn't exist -->
       <classpath>
@@ -153,9 +119,7 @@
       </classpath>
     </available>
   </target>
-
   <target name="checkMainCompiled" unless="mainIsCompiled" depends="checkMainIsAvailable">
     <fail message="ZooKeeper main must first be compiled (toplevel build.xml)"/>
   </target>
-
 </project>
