@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <!--
   /**
@@ -21,17 +21,15 @@
   -->
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.zookeeper</groupId>
+    <groupId>io.streamnative</groupId>
     <artifactId>parent</artifactId>
-    <version>3.6.4-SNAPSHOT</version>
+    <version>3.6.3.1</version>
     <relativePath>..</relativePath>
   </parent>
-
   <artifactId>zookeeper</artifactId>
   <packaging>jar</packaging>
   <name>Apache ZooKeeper - Server</name>
   <description>ZooKeeper server</description>
-
   <dependencies>
     <dependency>
       <groupId>com.github.spotbugs</groupId>
@@ -50,7 +48,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper-jute</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -115,9 +113,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-       <groupId>io.dropwizard.metrics</groupId>
-       <artifactId>metrics-core</artifactId>
-       <scope>provided</scope>
+      <groupId>io.dropwizard.metrics</groupId>
+      <artifactId>metrics-core</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
@@ -159,10 +157,10 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
-      <plugin> <!-- ${maven.build.timestamp} does not support timezone :( -->
+      <plugin>
+        <!-- ${maven.build.timestamp} does not support timezone :( -->
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <executions>
@@ -224,7 +222,7 @@
               <executable>java</executable>
               <arguments>
                 <argument>-classpath</argument>
-                <classpath />
+                <classpath/>
                 <argument>org.apache.zookeeper.version.util.VerGen</argument>
                 <argument>${project.version}</argument>
                 <argument>${mvngit.commit.id}</argument>
@@ -254,7 +252,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -273,7 +270,6 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
@@ -317,7 +313,6 @@
           <classifier>osgi</classifier>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -330,7 +325,6 @@
           </execution>
         </executions>
       </plugin>
-     </plugins>
+    </plugins>
   </build>
-
 </project>

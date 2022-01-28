@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-<!--
+  <!--
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,14 +24,14 @@
     <groupId>org.apache</groupId>
     <artifactId>apache</artifactId>
     <version>23</version>
-    <relativePath />
+    <relativePath/>
     <!-- no parent resolution -->
   </parent>
-  <groupId>org.apache.zookeeper</groupId>
+  <groupId>io.streamnative</groupId>
   <artifactId>parent</artifactId>
   <packaging>pom</packaging>
   <!-- to change version: mvn -\-batch-mode release:update-versions -DdevelopmentVersion=3.6.0-SNAPSHOT -->
-  <version>3.6.4-SNAPSHOT</version>
+  <version>3.6.3.1</version>
   <name>Apache ZooKeeper</name>
   <description>
     ZooKeeper is a centralized service for maintaining configuration information, naming,
@@ -55,7 +55,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
   <modules>
     <module>zookeeper-docs</module>
     <module>zookeeper-jute</module>
@@ -66,11 +65,10 @@
     <module>zookeeper-assembly</module>
     <module>zookeeper-compatibility-tests</module>
   </modules>
-
   <scm>
-    <connection>scm:git:https://gitbox.apache.org/repos/asf/zookeeper.git</connection>
-    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/zookeeper.git</developerConnection>
-    <url>https://gitbox.apache.org/repos/asf/zookeeper.git</url>
+    <connection>scm:git:https://github.com/streamnative/zookeeper.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:streamnative/zookeeper.git</developerConnection>
+    <url>https://github.com/streamnative/zookeeper</url>
     <tag>branch-3.6</tag>
   </scm>
   <issueManagement>
@@ -248,13 +246,12 @@
       <timezone>-8</timezone>
     </developer>
     <developer>
-        <id>eolivelli</id>
-        <name>Enrico Olivelli</name>
-        <email>eolivelli@apache.org</email>
-        <timezone>+1</timezone>
+      <id>eolivelli</id>
+      <name>Enrico Olivelli</name>
+      <email>eolivelli@apache.org</email>
+      <timezone>+1</timezone>
     </developer>
   </developers>
-
   <profiles>
     <profile>
       <id>full-build</id>
@@ -277,44 +274,44 @@
       </activation>
     </profile>
     <profile>
-        <id>apache-release</id>
-        <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.apache.resources</groupId>
-                            <artifactId>apache-source-release-assembly-descriptor</artifactId>
-                            <version>1.0.6</version>
-                        </dependency>
-                    </dependencies>
-                    <executions>
-                        <execution>
-                            <id>source-release-assembly-tar-gz</id>
-                            <phase>initialize</phase>
-                            <goals>
-                                <goal>single</goal>
-                            </goals>
-                            <configuration>
-                                <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-                                <descriptorRefs>
-                                    <!-- defined in Apache Parent Pom -->
-                                    <descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
-                                </descriptorRefs>
-                                <finalName>apache-zookeeper-${project.version}</finalName>
-                                <appendAssemblyId>false</appendAssemblyId>
-                                <formats>
-                                    <format>tar.gz</format>
-                                </formats>
-                                <tarLongFileMode>posix</tarLongFileMode>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </build>
+      <id>apache-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <dependencies>
+              <dependency>
+                <groupId>org.apache.apache.resources</groupId>
+                <artifactId>apache-source-release-assembly-descriptor</artifactId>
+                <version>1.0.6</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>source-release-assembly-tar-gz</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                  <descriptorRefs>
+                    <!-- defined in Apache Parent Pom -->
+                    <descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
+                  </descriptorRefs>
+                  <finalName>apache-zookeeper-${project.version}</finalName>
+                  <appendAssemblyId>false</appendAssemblyId>
+                  <formats>
+                    <format>tar.gz</format>
+                  </formats>
+                  <tarLongFileMode>posix</tarLongFileMode>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>m2e</id>
@@ -336,16 +333,38 @@
         <maven.compiler.release>8</maven.compiler.release>
       </properties>
     </profile>
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
-
   <properties>
     <!-- maven properties -->
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <dependency.locations.enabled>false</dependency.locations.enabled>
-
     <surefire-forkcount>8</surefire-forkcount>
-
     <!-- dependency versions -->
     <slf4j.version>1.7.25</slf4j.version>
     <audience-annotations.version>0.5.0</audience-annotations.version>
@@ -368,12 +387,9 @@
     <spotbugsannotations.version>4.0.2</spotbugsannotations.version>
     <checkstyle.version>8.17</checkstyle.version>
     <enforcer.version>3.0.0-M3</enforcer.version>
-
     <!-- parameter to pass to C client build -->
     <c-client-openssl>yes</c-client-openssl>
-
   </properties>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -504,10 +520,10 @@
         <artifactId>metrics-core</artifactId>
         <version>${dropwizard.version}</version>
         <exclusions>
-           <exclusion>
-              <groupId>org.slf4j</groupId>
-              <artifactId>slf4j-api</artifactId>
-           </exclusion>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
@@ -521,8 +537,8 @@
         <version>${json.version}</version>
         <exclusions>
           <exclusion>
-              <groupId>junit</groupId>
-              <artifactId>junit</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -545,7 +561,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <build>
     <pluginManagement>
       <plugins>
@@ -554,17 +569,17 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.1</version>
           <configuration>
-             <showWarnings>true</showWarnings>
-             <compilerArgs>
-               <compilerArg>-Werror</compilerArg>
-               <compilerArg>-Xlint:deprecation</compilerArg>
-               <compilerArg>-Xlint:unchecked</compilerArg>
-               <compilerArg>-Xlint:-options</compilerArg>
-               <compilerArg>-Xdoclint:-missing</compilerArg>
-               <!-- https://issues.apache.org/jira/browse/MCOMPILER-205 -->
-               <compilerArg>-Xpkginfo:always</compilerArg>
-              </compilerArgs>
-            </configuration>
+            <showWarnings>true</showWarnings>
+            <compilerArgs>
+              <compilerArg>-Werror</compilerArg>
+              <compilerArg>-Xlint:deprecation</compilerArg>
+              <compilerArg>-Xlint:unchecked</compilerArg>
+              <compilerArg>-Xlint:-options</compilerArg>
+              <compilerArg>-Xdoclint:-missing</compilerArg>
+              <!-- https://issues.apache.org/jira/browse/MCOMPILER-205 -->
+              <compilerArg>-Xpkginfo:always</compilerArg>
+            </compilerArgs>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -698,8 +713,8 @@
           <artifactId>maven-remote-resources-plugin</artifactId>
           <executions>
             <execution>
-               <id>process-resource-bundles</id>
-               <phase>none</phase>
+              <id>process-resource-bundles</id>
+              <phase>none</phase>
             </execution>
           </executions>
         </plugin>
@@ -708,9 +723,18 @@
           <artifactId>maven-bundle-plugin</artifactId>
           <version>5.1.1</version>
         </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
       </plugins>
     </pluginManagement>
-
     <plugins>
       <plugin>
         <groupId>com.github.koraktor</groupId>
@@ -760,8 +784,8 @@
             <configuration>
               <exportAntProperties>true</exportAntProperties>
               <target>
-                <property environment="env" />
-                <exec executable="hostname" outputproperty="host.name" />
+                <property environment="env"/>
+                <exec executable="hostname" outputproperty="host.name"/>
               </target>
             </configuration>
           </execution>
@@ -841,7 +865,6 @@
           <appendFilename>true</appendFilename>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
@@ -894,48 +917,49 @@
             <exclude>**/tests/zoo.cfg</exclude>
             <exclude>**/tests/wrappers-mt.opt</exclude>
             <exclude>**/c-doc.Doxyfile</exclude>
+            <exclude>**/dependency-reduced-pom.xml</exclude>
           </excludes>
           <consoleOutput>true</consoleOutput>
         </configuration>
       </plugin>
       <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <inherited>false</inherited>
-          <configuration>
-            <!-- update the version inside the C sources -->
-            <preparationGoals>clean install -DskipTests antrun:run@replace-cclient-files-during-release scm:add@add-cclient-files-during-release scm:checkin@commit-cclient-files-during-release</preparationGoals>
-            <completionGoals>clean install -DskipTests antrun:run@replace-cclient-files-during-release scm:add@add-cclient-files-during-release scm:checkin@commit-cclient-files-during-release</completionGoals>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-scm-plugin</artifactId>
-          <inherited>false</inherited>
-          <executions>
-             <execution>
-               <id>add-cclient-files-during-release</id>
-               <phase>none</phase>
-               <goals>
-                 <goal>add</goal>
-               </goals>
-               <configuration>
-                 <pushChanges>false</pushChanges>
-                 <includes>zookeeper-client/zookeeper-client-c/CMakeLists.txt,zookeeper-client/zookeeper-client-c/configure.ac,zookeeper-client/zookeeper-client-c/include/zookeeper_version.h</includes>
-               </configuration>
-            </execution>
-            <execution>
-               <id>commit-cclient-files-during-release</id>
-               <phase>none</phase>
-               <goals>
-                   <!-- git commit -->
-                <goal>checkin</goal>
-              </goals>
-              <configuration>
-                 <pushChanges>false</pushChanges>
-                 <message>Prepared ${project.version}</message>
-              </configuration>
-            </execution>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <inherited>false</inherited>
+        <configuration>
+          <!-- update the version inside the C sources -->
+          <preparationGoals>clean install -DskipTests antrun:run@replace-cclient-files-during-release scm:add@add-cclient-files-during-release scm:checkin@commit-cclient-files-during-release</preparationGoals>
+          <completionGoals>clean install -DskipTests antrun:run@replace-cclient-files-during-release scm:add@add-cclient-files-during-release scm:checkin@commit-cclient-files-during-release</completionGoals>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-plugin</artifactId>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>add-cclient-files-during-release</id>
+            <phase>none</phase>
+            <goals>
+              <goal>add</goal>
+            </goals>
+            <configuration>
+              <pushChanges>false</pushChanges>
+              <includes>zookeeper-client/zookeeper-client-c/CMakeLists.txt,zookeeper-client/zookeeper-client-c/configure.ac,zookeeper-client/zookeeper-client-c/include/zookeeper_version.h</includes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>commit-cclient-files-during-release</id>
+            <phase>none</phase>
+            <goals>
+              <!-- git commit -->
+              <goal>checkin</goal>
+            </goals>
+            <configuration>
+              <pushChanges>false</pushChanges>
+              <message>Prepared ${project.version}</message>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -979,6 +1003,17 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.8</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
     </plugins>
     <resources>
       <resource>
@@ -989,7 +1024,6 @@
       </resource>
     </resources>
   </build>
-
   <reporting>
     <plugins>
       <plugin>
@@ -998,5 +1032,14 @@
       </plugin>
     </plugins>
   </reporting>
-
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
 </project>

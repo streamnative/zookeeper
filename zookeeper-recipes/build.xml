@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -16,13 +15,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-
 <project name="zookeeperrecipes" default="compile" basedir=".">
-  
   <!-- In case one of the contrib subdirectories -->
   <!-- fails the build or test targets and you cannot fix it: -->
   <!-- Then add to fileset: excludes="badcontrib/build.xml" -->
-
   <!-- ====================================================== -->
   <!-- Compile contribs.                                      -->
   <!-- ====================================================== -->
@@ -31,7 +27,6 @@
       <fileset dir="." includes="*/build.xml"/>
     </subant>
   </target>
-  
   <!-- ====================================================== -->
   <!-- Package contrib jars.                                  -->
   <!-- ====================================================== -->
@@ -40,7 +35,6 @@
       <fileset dir="." includes="*/build.xml"/>
     </subant>
   </target>
-  
   <!-- ====================================================== -->
   <!-- Test all the contribs.                               -->
   <!-- ====================================================== -->
@@ -49,7 +43,6 @@
       <fileset dir="." includes="*/build.xml"/>
     </subant>
   </target>
-  
   <!-- ====================================================== -->
   <!-- Clean all the contribs.                              -->
   <!-- ====================================================== -->

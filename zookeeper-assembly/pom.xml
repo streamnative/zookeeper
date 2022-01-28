@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <!--
   /**
@@ -21,17 +21,15 @@
   -->
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.zookeeper</groupId>
+    <groupId>io.streamnative</groupId>
     <artifactId>parent</artifactId>
-    <version>3.6.4-SNAPSHOT</version>
+    <version>3.6.3.1</version>
     <relativePath>..</relativePath>
   </parent>
-
   <artifactId>zookeeper-assembly</artifactId>
   <packaging>pom</packaging>
   <name>Apache ZooKeeper - Assembly</name>
   <description>ZooKeeper Assembly</description>
-
   <profiles>
     <profile>
       <id>full-build</id>
@@ -40,43 +38,40 @@
       </properties>
     </profile>
   </profiles>
-
-
   <properties>
     <rw.file.permission>0644</rw.file.permission>
     <rwx.file.permission>0755</rwx.file.permission>
     <skip.lib.artifact>true</skip.lib.artifact>
   </properties>
-
   <dependencies>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper-docs</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper-jute</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper-client</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
     </dependency>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper-prometheus-metrics</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper-recipes</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
@@ -108,15 +103,14 @@
       <artifactId>jline</artifactId>
     </dependency>
     <dependency>
-       <groupId>io.dropwizard.metrics</groupId>
-       <artifactId>metrics-core</artifactId>
+      <groupId>io.dropwizard.metrics</groupId>
+      <artifactId>metrics-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.xerial.snappy</groupId>
       <artifactId>snappy-java</artifactId>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -138,7 +132,7 @@
               <tarLongFileMode>posix</tarLongFileMode>
             </configuration>
           </execution>
-        <execution>
+          <execution>
             <id>lib-assembly</id>
             <phase>package</phase>
             <goals>
@@ -156,15 +150,13 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
-            <skip>true</skip>
+          <skip>true</skip>
         </configuration>
       </plugin>
-
       <plugin>
         <artifactId>maven-deploy-plugin</artifactId>
         <configuration>
@@ -172,7 +164,30 @@
           <skip>true</skip>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>javadoc-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>javadoc</classifier>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
-
 </project>

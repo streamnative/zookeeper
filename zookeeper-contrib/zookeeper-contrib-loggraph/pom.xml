@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <!--
   /**
@@ -21,26 +21,24 @@
   -->
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.zookeeper</groupId>
+    <groupId>io.streamnative</groupId>
     <artifactId>zookeeper-contrib</artifactId>
-    <version>3.6.4-SNAPSHOT</version>
+    <version>3.6.3.1</version>
   </parent>
-
   <artifactId>zookeeper-contrib-loggraph</artifactId>
   <packaging>jar</packaging>
   <name>Apache ZooKeeper - Contrib - Loggraph</name>
   <description>
     LogGraph is an application for viewing and filtering zookeeper logs. It can handle transaction logs and message logs.
   </description>
-
   <dependencies>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper-jute</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.zookeeper</groupId>
+      <groupId>io.streamnative</groupId>
       <artifactId>zookeeper</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -81,7 +79,6 @@
       <artifactId>json-simple</artifactId>
     </dependency>
   </dependencies>
-
   <build>
     <resources>
       <resource>
@@ -89,5 +86,4 @@
       </resource>
     </resources>
   </build>
-
 </project>
