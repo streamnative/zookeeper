@@ -33,6 +33,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
@@ -89,11 +90,18 @@ public class ZKDatabase {
 
     public static final String COMMIT_LOG_COUNT = "zookeeper.commitLogCount";
     public static final int DEFAULT_COMMIT_LOG_COUNT = 500;
+    public static final String COMMIT_LOG_SIZE = "zookeeper.commitLogSize";
+    public static final double DEFAULT_COMMIT_LOG_SIZE = Runtime.getRuntime().totalMemory() * 0.2;
     public int commitLogCount;
+    public double commitLogSize;
     protected Queue<Proposal> committedLog = new ArrayDeque<>();
     protected ReentrantReadWriteLock logLock = new ReentrantReadWriteLock();
     private volatile boolean initialized = false;
 
+    /**
+     * committedLog bytes size.
+     */
+    private AtomicLong currentCommitLogSize = new AtomicLong(0);
     /**
      * Number of txn since last snapshot;
      */
@@ -149,7 +157,26 @@ public class ZKDatabase {
                 DEFAULT_COMMIT_LOG_COUNT);
             commitLogCount = DEFAULT_COMMIT_LOG_COUNT;
         }
-        LOG.info("{}={}", COMMIT_LOG_COUNT, commitLogCount);
+
+        try {
+            commitLogSize = Double.parseDouble(
+                System.getProperty(COMMIT_LOG_SIZE,
+                    Double.toString(DEFAULT_COMMIT_LOG_SIZE)));
+            if (commitLogSize < DEFAULT_COMMIT_LOG_SIZE) {
+                commitLogSize = DEFAULT_COMMIT_LOG_SIZE;
+                LOG.warn(
+                    "The configured commitLogSize {} is less than the recommended {}, going to use the recommended one",
+                    COMMIT_LOG_SIZE,
+                    DEFAULT_COMMIT_LOG_SIZE);
+            }
+        } catch (NumberFormatException e) {
+            LOG.error(
+                "Error parsing {} - use default value {}",
+                COMMIT_LOG_SIZE,
+                DEFAULT_COMMIT_LOG_SIZE);
+            commitLogSize = DEFAULT_COMMIT_LOG_SIZE;
+        }
+        LOG.info("{}={}, {}={}", COMMIT_LOG_COUNT, commitLogCount, COMMIT_LOG_SIZE, commitLogSize);
     }
 
     /**
@@ -183,6 +210,7 @@ public class ZKDatabase {
         } finally {
             lock.unlock();
         }
+        currentCommitLogSize.set(0);
         initialized = false;
     }
 
@@ -318,8 +346,14 @@ public class ZKDatabase {
         WriteLock wl = logLock.writeLock();
         try {
             wl.lock();
-            if (committedLog.size() > commitLogCount) {
-                committedLog.remove();
+
+            if (committedLog.size() > commitLogCount || currentCommitLogSize.get() > commitLogSize) {
+                Proposal proposal = committedLog.remove();
+                int proposalSize = proposal.packet.getData() != null ? proposal.packet.getData().length * 2 : 0;
+                if (proposal.request.request != null) {
+                    proposalSize += proposal.request.request.capacity();
+                }
+                currentCommitLogSize.getAndAdd(-proposalSize);
                 minCommittedLog = committedLog.peek().packet.getZxid();
             }
             if (committedLog.isEmpty()) {
@@ -333,6 +367,11 @@ public class ZKDatabase {
             p.packet = pp;
             p.request = request;
             committedLog.add(p);
+            int proposalSize = data != null ? data.length * 2 : 0;
+            if (request.request != null) {
+                proposalSize += request.request.capacity();
+            }
+            currentCommitLogSize.getAndAdd(proposalSize);
             maxCommittedLog = p.packet.getZxid();
         } finally {
             wl.unlock();
@@ -749,6 +788,10 @@ public class ZKDatabase {
      */
     public long getTxnSize() {
         return snapLog.getTotalLogSize();
+    }
+
+    public long getCurrentCommitLogSize() {
+        return currentCommitLogSize.get();
     }
 
     public boolean compareDigest(TxnHeader header, Record txn, TxnDigest digest) {

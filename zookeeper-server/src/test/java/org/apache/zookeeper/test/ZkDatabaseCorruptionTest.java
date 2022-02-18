@@ -24,12 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import org.apache.zookeeper.AsyncCallback;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.server.Request;
 import org.apache.zookeeper.server.SyncRequestProcessor;
 import org.apache.zookeeper.server.ZKDatabase;
 import org.apache.zookeeper.server.persistence.FileTxnSnapLog;
@@ -196,4 +198,13 @@ public class ZkDatabaseCorruptionTest extends ZKTestCase {
         assertEquals(0, zkDatabase.calculateTxnLogSizeLimit());
     }
 
+    @Test
+    public void testCommittedLogSizeLimit() throws IOException {
+        ZKDatabase zkDatabase = new ZKDatabase(new FileTxnSnapLog(new File("foo"), new File("bar")));
+        final int byteSize = 1024;
+        ByteBuffer byteBuffer = ByteBuffer.wrap(new byte[byteSize]);
+        Request request = new Request(null, 0, 0, ZooDefs.OpCode.setData, byteBuffer, null);
+        zkDatabase.addCommittedProposal(request);
+        assertEquals(byteSize, zkDatabase.getCurrentCommitLogSize());
+    }
 }
